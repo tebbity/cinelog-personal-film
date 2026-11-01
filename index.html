@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CINELOG — Beranda</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Sidebar Toggle (Mobile) -->
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- App Layout -->
+<div class="app-layout">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">CINE<span class="logo-accent">LOG</span></div>
+      <div class="logo-tagline">Personal Film Journal</div>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebarAvatar">CL</div>
+      <div class="user-info">
+        <div class="user-name" id="sidebarName">Pengguna CINELOG</div>
+        <div class="user-handle" id="sidebarHandle">@cinephile</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Navigasi</div>
+      <a href="index.html" class="nav-item">
+        <span class="nav-icon">🏠</span> Beranda
+      </a>
+      <a href="collection.html" class="nav-item">
+        <span class="nav-icon">🎬</span> Koleksi Film
+      </a>
+      <a href="watchlist.html" class="nav-item">
+        <span class="nav-icon">🔖</span> Watchlist
+        <span class="nav-badge" id="watchlistBadge">0</span>
+      </a>
+      <a href="watched.html" class="nav-item">
+        <span class="nav-icon">✅</span> Sudah Ditonton
+      </a>
+
+      <div class="nav-section-title" style="margin-top:8px">Fitur</div>
+      <a href="statistics.html" class="nav-item">
+        <span class="nav-icon">📊</span> Statistik
+      </a>
+      <a href="ai-recommend.html" class="nav-item">
+        <span class="nav-icon">🤖</span> Rekomendasi AI
+      </a>
+    </nav>
+
+    <div class="sidebar-stats">
+      <div class="stat-mini">
+        <span class="stat-value" id="sidebarWatchedCount">0</span>
+        <span class="stat-label">Ditonton</span>
+      </div>
+      <div class="stat-mini">
+        <span class="stat-value" id="sidebarWatchlistCount">0</span>
+        <span class="stat-label">Watchlist</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="main-content">
+
+    <!-- Top Header -->
+    <header class="page-header">
+      <span class="page-title">🏠 Beranda</span>
+      <div class="header-search" style="position:relative">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="globalSearch" placeholder="Cari film, sutradara, genre..." />
+        <div class="search-results" id="searchResults"></div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary btn-sm" onclick="document.getElementById('quickAddModal').classList.add('active')">
+          + Tambah Film
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="page-content">
+
+      <!-- Hero Banner -->
+      <div class="dashboard-hero">
+        <h1>Selamat Datang di CINELOG 🎞️</h1>
+        <p>Catat perjalanan sinematikmu, temukan film baru, dan bagikan pengalaman menontonmu.</p>
+        <div class="hero-date" id="heroDayGreet"></div>
+      </div>
+
+      <!-- Stats Overview -->
+      <div class="stats-grid" id="statsGrid">
+        <!-- diisi oleh dashboard.js -->
+      </div>
+
+      <!-- Recent & Recommendations Row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-bottom:32px" id="dashboardRow">
+
+        <!-- Recently Watched -->
+        <div>
+          <div class="section-header">
+            <div class="section-title">Baru Ditonton</div>
+            <a href="watched.html" class="btn btn-ghost btn-sm">Lihat Semua</a>
+          </div>
+          <div class="recent-movies-scroll" id="recentWatched">
+            <!-- diisi oleh dashboard.js -->
+          </div>
+        </div>
+
+        <!-- Watchlist Preview -->
+        <div>
+          <div class="section-header">
+            <div class="section-title">Segera Ditonton</div>
+            <a href="watchlist.html" class="btn btn-ghost btn-sm">Lihat Semua</a>
+          </div>
+          <div class="recent-movies-scroll" id="watchlistPreview">
+            <!-- diisi oleh dashboard.js -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Recommendations -->
+      <div style="margin-bottom:32px">
+        <div class="section-header">
+          <div class="section-title">Rekomendasi Untuk Kamu</div>
+          <a href="ai-recommend.html" class="btn btn-primary btn-sm">🤖 AI Recommend</a>
+        </div>
+        <div class="movies-grid" id="recommendations">
+          <!-- diisi oleh dashboard.js -->
+        </div>
+      </div>
+
+      <!-- Activity Feed -->
+      <div>
+        <div class="section-header">
+          <div class="section-title">Aktivitas Terkini</div>
+        </div>
+        <div class="activity-feed" id="activityFeed">
+          <!-- diisi oleh dashboard.js -->
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ===== MOVIE DETAIL MODAL ===== -->
+<div class="modal-overlay" id="movieModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Detail Film</h2>
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="film-detail-layout">
+        <div class="film-detail-poster">
+          <div id="modalPoster" style="width:100%;height:100%;min-height:250px;border-radius:var(--radius-lg);overflow:hidden;position:relative"></div>
+        </div>
+        <div class="film-detail-info">
+          <div class="original-title" id="modalOrigTitle"></div>
+          <div class="film-meta-row">
+            <span class="meta-pill" id="modalYear"></span>
+            <span class="meta-pill" id="modalDuration"></span>
+            <span class="meta-pill" id="modalLang"></span>
+          </div>
+          <div class="film-meta-row" id="modalGenres"></div>
+          <p class="film-synopsis" id="modalSynopsis"></p>
+          <p class="film-director" id="modalDirector"></p>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px" id="modalCast"></p>
+          <div id="modalStatusSection"></div>
+        </div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
+      <div id="modalRatingSection"></div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
+      <div id="modalReviewSection"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeMovieModal()">Tutup</button>
+      <button class="btn btn-primary" id="saveReviewBtn">💾 Simpan Ulasan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUICK ADD MODAL (placeholder) ===== -->
+<div class="modal-overlay" id="quickAddModal" onclick="if(event.target===this)this.classList.remove('active')">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h2 class="modal-title">+ Tambah Film Baru</h2>
+      <button class="modal-close" onclick="document.getElementById('quickAddModal').classList.remove('active')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="text-align:center;padding:24px 0">
+        <div style="font-size:48px;margin-bottom:16px">🔧</div>
+        <p style="color:var(--text-secondary);font-size:14px;line-height:1.7">
+          Fitur tambah film secara manual sedang dalam pengembangan.<br>
+          Gunakan koleksi yang sudah tersedia atau eksplorasi melalui fitur <strong>Rekomendasi AI</strong>.
+        </p>
+        <a href="ai-recommend.html" class="btn btn-primary" style="margin-top:20px;display:inline-flex">
+          🤖 Coba Rekomendasi AI
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- Scripts -->
+<script src="js/movies.js"></script>
+<script src="js/app.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

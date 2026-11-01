@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CINELOG — Koleksi Film</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Menu">☰</button>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">CINE<span class="logo-accent">LOG</span></div>
+      <div class="logo-tagline">Personal Film Journal</div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">CL</div>
+      <div class="user-info">
+        <div class="user-name">Pengguna CINELOG</div>
+        <div class="user-handle">@cinephile</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">Navigasi</div>
+      <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Beranda</a>
+      <a href="collection.html" class="nav-item"><span class="nav-icon">🎬</span> Koleksi Film</a>
+      <a href="watchlist.html" class="nav-item"><span class="nav-icon">🔖</span> Watchlist<span class="nav-badge" id="watchlistBadge">0</span></a>
+      <a href="watched.html" class="nav-item"><span class="nav-icon">✅</span> Sudah Ditonton</a>
+      <div class="nav-section-title" style="margin-top:8px">Fitur</div>
+      <a href="statistics.html" class="nav-item"><span class="nav-icon">📊</span> Statistik</a>
+      <a href="ai-recommend.html" class="nav-item"><span class="nav-icon">🤖</span> Rekomendasi AI</a>
+    </nav>
+    <div class="sidebar-stats">
+      <div class="stat-mini"><span class="stat-value" id="sidebarWatchedCount">0</span><span class="stat-label">Ditonton</span></div>
+      <div class="stat-mini"><span class="stat-value" id="sidebarWatchlistCount">0</span><span class="stat-label">Watchlist</span></div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <span class="page-title">🎬 Koleksi Film</span>
+      <div class="header-search" style="position:relative">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="globalSearch" placeholder="Cari film, sutradara, genre..." />
+        <div class="search-results" id="searchResults"></div>
+      </div>
+      <div class="header-actions">
+        <span class="section-count" id="collectionCount">0 film</span>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-label">Genre:</span>
+          <select class="filter-select" id="filterGenre">
+            <option value="semua">Semua Genre</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Drama">Drama</option>
+            <option value="Thriller">Thriller</option>
+            <option value="Aksi">Aksi</option>
+            <option value="Animasi">Animasi</option>
+            <option value="Kriminal">Kriminal</option>
+            <option value="Musikal">Musikal</option>
+            <option value="Petualangan">Petualangan</option>
+            <option value="Komedi">Komedi</option>
+            <option value="Romansa">Romansa</option>
+            <option value="Perang">Perang</option>
+            <option value="Misteri">Misteri</option>
+            <option value="Biografi">Biografi</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Dekade:</span>
+          <select class="filter-select" id="filterYear">
+            <option value="semua">Semua Tahun</option>
+            <option value="2020">2020-an</option>
+            <option value="2010">2010-an</option>
+            <option value="2000">2000-an</option>
+            <option value="1990">1990-an</option>
+            <option value="1970">1970-an</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Urutkan:</span>
+          <select class="filter-select" id="filterSort">
+            <option value="judul">A–Z Judul</option>
+            <option value="rating">Rating Tertinggi</option>
+            <option value="tahun-terbaru">Terbaru</option>
+            <option value="tahun-terlama">Terlama</option>
+            <option value="terbaru-ditambah">Baru Ditambah</option>
+          </select>
+        </div>
+        <div class="filter-tags">
+          <span class="filter-tag active" data-status="semua">Semua</span>
+          <span class="filter-tag" data-status="watched">✅ Ditonton</span>
+          <span class="filter-tag" data-status="watchlist">🔖 Watchlist</span>
+        </div>
+      </div>
+
+      <!-- Movie Grid -->
+      <div class="movies-grid large" id="collectionGrid">
+        <!-- diisi oleh collection.js -->
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState" style="display:none">
+        <div class="empty-icon">🎬</div>
+        <div class="empty-title">Tidak ada film ditemukan</div>
+        <div class="empty-desc">Coba ubah filter atau kata kunci pencarian.</div>
+        <button class="btn btn-primary" onclick="resetFilters()">Reset Filter</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Movie Detail Modal -->
+<div class="modal-overlay" id="movieModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Detail Film</h2>
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="film-detail-layout">
+        <div class="film-detail-poster">
+          <div id="modalPoster" style="width:100%;height:100%;min-height:250px;border-radius:var(--radius-lg);overflow:hidden;position:relative"></div>
+        </div>
+        <div class="film-detail-info">
+          <div class="original-title" id="modalOrigTitle"></div>
+          <div class="film-meta-row"><span class="meta-pill" id="modalYear"></span><span class="meta-pill" id="modalDuration"></span><span class="meta-pill" id="modalLang"></span></div>
+          <div class="film-meta-row" id="modalGenres"></div>
+          <p class="film-synopsis" id="modalSynopsis"></p>
+          <p class="film-director" id="modalDirector"></p>
+          <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px" id="modalCast"></p>
+          <div id="modalStatusSection"></div>
+        </div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
+      <div id="modalRatingSection"></div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:20px 0">
+      <div id="modalReviewSection"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeMovieModal()">Tutup</button>
+      <button class="btn btn-primary" id="saveReviewBtn">💾 Simpan Ulasan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/movies.js"></script>
+<script src="js/app.js"></script>
+<script src="js/collection.js"></script>
+</body>
+</html>
